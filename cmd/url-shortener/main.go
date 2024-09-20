@@ -1,10 +1,13 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"log/slog"
 	"os"
 	"url-shortener/internal/config"
+	"url-shortener/internal/lib/logger/sl"
+	"url-shortener/internal/storage/sqlite"
 
 	"github.com/joho/godotenv"
 )
@@ -22,12 +25,20 @@ func main() {
 
 	cfg := config.MustLoad()
 
+	fmt.Print(cfg)
+
 	log := settupLogger(cfg.Env)
 
 	log.Info("starting url-shortener", slog.String("env", cfg.Env))
 	log.Debug("debug messages are enabled")
 
-	// TODO: init logger: slog
+	storage, err := sqlite.New(cfg.StoragePath)
+	if err != nil {
+		log.Error("failed to init storage", sl.Err(err))
+		os.Exit(1)
+	}
+
+	_ = storage
 
 	// TODO: init storage: sqlite
 
