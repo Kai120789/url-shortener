@@ -40,7 +40,19 @@ func main() {
 
 	_ = storage
 
-	// TODO: init storage: sqlite
+	id, err := storage.SaveURL("https://google.com", "google")
+	if err != nil {
+		log.Error("failed to save url", sl.Err(err))
+		os.Exit(1)
+	}
+
+	log.Info("save url", slog.Int64("id", id))
+
+	id, err = storage.SaveURL("https://google.com", "google")
+	if err != nil {
+		log.Error("failed to save url", sl.Err(err))
+		os.Exit(1)
+	}
 
 	// TODO: init router: chi, "chi render"
 
